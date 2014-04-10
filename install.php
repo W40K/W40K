@@ -25,22 +25,24 @@
 					else
 					{
 						echo "<p>Connexion success!</p>";
-						$file = "<?php \$mysqli = mysqli_connect(\"local.42.fr\", \"$_POST[login]\", $_POST[passwrd]\", \"db_W40k\") ?>";
-						file_put_contents("includes/connect.inc.php", $file);
 					}
+						$file = "<?php \$mysqli = mysqli_connect(\"local.42.fr\", \"$_POST[login]\", \"$_POST[passwrd]\", \"db_w40k\");\nif (mysqli_connect_errno())echo \"<p>Failed to connect to MySQL: \".mysqli_connect_error().\"<p>\";?>";
+						file_put_contents("includes/connect.inc.php", $file);
 					echo "<h2>db_W40k creation database</h2>";
-					if (mysqli_query($mysqli, "CREATE DATABASE db_W40k") === TRUE)
+					if (mysqli_query($mysqli, "CREATE DATABASE db_w40k") === TRUE)
 						echo "<p>db_W40kt succesfully created.<br /><p>";
 					else
 						echo "<p>Failed to create database:".mysqli_error($mysqli)."<p>";
-					if (mysqli_query($mysqli, "USE db_W40k") === TRUE)
-						echo "<p>Success to switch to db_W40k</p>";
+					if (mysqli_query($mysqli, "USE db_w40k") === TRUE)
+						echo "<p>Success to switch to db_w40k</p>";
 					else
-						echo "<p>Failed to switch to db_W40k</p>";
+						echo "<p>Failed to switch to db_w40k</p>";
 					if (mysqli_query($mysqli, "CREATE TABLE ships (
 						ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 						name VARCHAR(255) NOT NULL,
 						sprite VARCHAR(255) NOT NULL,
+						type ENUM ('FregateImperial', 'RaiderIdolator') NOT NULL,
+						race ENUM ('imperium', 'chaos') NOT NULL,
 						height INT NOT NULL,
 						width INT NOT NULL,
 						life INT NOT NULL,
@@ -52,6 +54,8 @@
 						echo "<p>Ships table ceated with success.";
 					else
 						echo "<p>Failed to create ships table:".mysqli_error($mysqli)."<p>";
+					include("includes/initdatabase.inc.php");
+					header("Location: index.php");
 				}
 			?>
 		</div>
