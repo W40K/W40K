@@ -1,1 +1,0 @@
-<?php $mysqli = mysqli_connect("local.42.fr", "root", totoisdumb", "db_W40k") ?>

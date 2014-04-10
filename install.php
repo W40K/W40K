@@ -26,7 +26,7 @@
 					{
 						echo "<p>Connexion success!</p>";
 						$file = "<?php \$mysqli = mysqli_connect(\"local.42.fr\", \"$_POST[login]\", $_POST[passwrd]\", \"db_W40k\") ?>";
-						file_put_contents("connect.inc.php", $file);
+						file_put_contents("includes/connect.inc.php", $file);
 					}
 					echo "<h2>db_W40k creation database</h2>";
 					if (mysqli_query($mysqli, "CREATE DATABASE db_W40k") === TRUE)
