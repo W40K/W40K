@@ -16,8 +16,10 @@ foreach ($array as $key => $elem)
 	$new_ship = getShip($elem);
 	if ( $elem['race'] === 'imperium')
 		$imperium_fleet->add($new_ship);
+	if ( $elem['race'] === 'chaos')
+		$chaos_fleet->add($new_ship);
 }
-print ($imperium_fleet);
+
 function getShip ($elem) {
 	if ($elem['type'] === 'FregateImperial')
 		return new FregateImperial($elem);
