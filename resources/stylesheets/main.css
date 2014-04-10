@@ -1,3 +1,30 @@
 body {
-	background: pink;
+	background: rgb(10,10,20);
+}
+
+#boardGame {
+	position:relative;
+	background:url("/resources/images/space.jpg");
+	width: 1450px;
+	height: 1200px;
+	overflow: hidden;
+}
+
+table {
+	position:absolute;
+	width: 1450px;
+	height: 1200px;
+	border-collapse:collapse;
+	outline: 3px white groove;
+	overflow:scroll;
+}
+
+td {
+	border: 1px solid rgba(255,255,255,0.2);
+}
+
+#drag {
+	width:100px;
+	height:100px;
+	background: red;
 }
