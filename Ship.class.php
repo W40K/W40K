@@ -1,30 +1,37 @@
 <?php
 abstract Class Ship {
 
-	protected				$_name;
-	protected				$_sprite;
-	protected				$_race;
-	protected				$_height;
-	protected				$_width;
-	protected				$_life;
-	protected				$_pp;
-	protected				$_speed;
-	protected				$_agility;
-	protected				$_shield;
-	protected				$_mobilize;
+	public						$name;
+	public						$sprite;
+	public						$race;
+	public						$height;
+	public						$width;
+	public						$life;
+	public						$pp;
+	public						$speed;
+	public						$agility;
+	public						$shield;
+	public						$mobilize;
+	public						$x = 0;
+	public						$y = 0;
 
 	public function				__construct(array $targ) {
-		$this->_name = $targ['name'];
-		$this->_sprite = $targ['sprite'];
-		$this->_race = $targ['race'];
-		$this->_height = $targ['height'];
-		$this->_width = $targ['width'];
-		$this->_life = $targ['life'];
-		$this->_pp = $targ['pp'];
-		$this->_speed = $targ['speed'];
-		$this->_agility = $targ['agility'];
-		$this->_shield = $targ['shield'];
-		$this->_mobilize = TRUE;
+		$this->name = $targ['name'];
+		$this->sprite = $targ['sprite'];
+		$this->race = $targ['race'];
+		$this->height = $targ['height'];
+		$this->width = $targ['width'];
+		$this->life = $targ['life'];
+		$this->pp = $targ['pp'];
+		$this->speed = $targ['speed'];
+		$this->agility = $targ['agility'];
+		$this->shield = $targ['shield'];
+		$this->mobilize = TRUE;
+		if ($this->race == "chaos")
+		{
+			$this->x = 145;
+			$this->y = 99;
+		}
 	}
 	public function 			__toString() {
 		return vsprintf("
@@ -40,7 +47,7 @@ abstract Class Ship {
 			\tAgility : %d\n
 			\tShield : %d\n
 			\tMobilize : %d\n
-			", array($this->_name,$this->_race,$this->_sprite,$this->_height,$this->_width,$this->_life,$this->_pp,$this->_speed,$this->_agility,$this->_shield,$this->_mobilize));
+			", array($this->name,$this->race,$this->sprite,$this->height,$this->width,$this->life,$this->pp,$this->speed,$this->agility,$this->shield,$this->mobilize));
 	}
 }
 ?>
