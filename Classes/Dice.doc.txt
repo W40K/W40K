@@ -1,0 +1,42 @@
+<- Dice ------------------------------------------------------------------------
+
+I : DEFINITION
+______________
+
+The Dice class accepts paramaters such as below :
+
+new Dice(["value" => $nb])
+
+Where :
+_$value is an optional int parameter stricly superior than 1 ;
+default value is 6.
+
+================================================================================
+
+II : GETTERS
+____________
+
+The class provides only getters for dice value exclusively, such as below :
+
+_ getDiceValue();
+
+================================================================================
+
+III : METHODS
+_____________
+
+The class provides various methods as below :
+
+int roll(int $n)
+---------------------
+_ rolls n dice of the preset value and returns the sum of them.
+
+================================================================================
+
+IV : VERBOSE MODE
+_________________
+
+Verbose mode can be enabled using the Dice verbose static attribute as below :
+_ Dice::verbose = true
+
+---------------------------------------------------------------------- Dice --->
