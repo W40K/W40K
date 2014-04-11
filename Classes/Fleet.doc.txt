@@ -1,0 +1,52 @@
+<- Fleet ------------------------------------------------------------------------
+
+I : DEFINITION
+______________
+
+The Fleet class accepts paramaters such as below :
+
+new Fleet(["name" => $name, "owner" => $owner])
+
+Where :
+_ $name is a mandatory paramater setting the name of the fleet.
+_ $owner is a mandatory paramater determining the player to whom belongs the
+fleet.
+================================================================================
+
+II : GETTERS AND SETTERS
+________________________
+
+The class provides getters and setters such as below :
+
+_ getOwner() and setOwner();
+_ getName() and setName();
+_ getSpaceships();
+
+================================================================================
+
+III : METHODS
+_____________
+
+The class provides various methods as below :
+
+void addShip($ship)
+---------------------
+_ adds the specified ship to the fleet.
+
+void removeShip($ship)
+---------------------
+_ removes the specified ship to the fleet.
+
+void is_destroyed()
+---------------------
+_ checks if the entire fleet has been destroyed. If so, ends the game.
+
+================================================================================
+
+IV : VERBOSE MODE
+_________________
+
+Verbose mode can be enabled using the Fleet verbose static attribute as below :
+_ Fleet::verbose = true
+
+---------------------------------------------------------------------- Fleet --->

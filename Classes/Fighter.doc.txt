@@ -1,0 +1,31 @@
+<- Fighter ---------------------------------------------------------------------
+
+I : DEFINITION
+______________
+
+The Fighter class extends the Ship abstract class. It accepts no other
+parameters. Please refer to the Ship abstract class for more informations.
+
+================================================================================
+
+II : GETTERS
+____________
+
+Please refer to the Ship abstract class for more informations.
+
+================================================================================
+
+III : METHODS
+_____________
+
+Please refer to the Ship abstract class for more informations.
+
+================================================================================
+
+IV : VERBOSE MODE
+_________________
+
+Verbose mode can be enabled using the Fighter verbose static attribute as below :
+_ Fighter::verbose = true
+
+------------------------------------------------------------------- Fighter --->

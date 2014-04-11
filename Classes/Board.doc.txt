@@ -1,0 +1,55 @@
+<- Board ----------------------------------------------------------------------
+
+I : DEFINITION
+______________
+
+The Board class accepts paramaters such as below :
+
+new Board(["width" => $width, "height" => $height)
+
+$height and $width are both mandatory and must be strictely superior to 0.
+================================================================================
+
+II : GETTERS
+____________
+
+The class provides only the following getters :
+
+_ getWidth();
+_ getHeight();
+_ getBoard();
+
+The Board attribute is a double array, according to this schema :
+$this->_board[$y][$x] where $y and $x are respectively the y and x coordinates.
+
+================================================================================
+
+III : METHODS
+_____________
+
+The class provides various methods as below :
+
+void initBoard()
+---------------------
+_ init a board with the width and height by default (150, 100) and fill it with
+null objects and sprites.
+
+void updateBoard($changes)
+---------------------
+_ accept as unique paramaters and array such as :
+$change = ["x" => $x, "y" => $y, "object" => $object]
+
+string toJson()
+---------------------
+_ returns the board game to the Json format, including for each block the objects
+it contains.
+
+================================================================================
+
+IV : VERBOSE MODE
+_________________
+
+Verbose mode can be enabled using the Board verbose static attribute as below :
+_ Board::verbose = true
+
+-------------------------------------------------------------------- Board --->

@@ -1,42 +1,70 @@
-<- Dice ------------------------------------------------------------------------
+<- Ship ------------------------------------------------------------------------
 
 I : DEFINITION
 ______________
 
-The Dice class accepts paramaters such as below :
+The Ship class is an abstract class which needs to be extended by children
+classes (see Fighter for example). Use as below :
 
-new Dice(["value" => $nb])
+new ***(["hp" => $hp, "pp" => $pp, "inerty" => $inerty, "faction" => $faction,
+		"owner" => $owner, "name" => $name, "shield" => $shield, "y" => $y,
+		"size" => $size, "speed" => $spead, "sprite" => $sprite], "x" => $x)
 
-Where :
-_$value is an optional int parameter stricly superior than 1 ;
-default value is 6.
+Mandatory arguments are listed hereby :
+_ $name, $sprite, $faction, $owner, $x, $y
+
+Optional arguments, if not set, take the following default values :
+_ $size = 1
+_ $hp = 5
+_ $pp = 10
+_ $speed = 10
+_ $inerty = 2
+_ $shield = 0
 
 ================================================================================
 
-II : GETTERS
-____________
+II : GETTERS AND SETTERS
+________________________
 
-The class provides only getters for dice value exclusively, such as below :
-
-_ getDiceValue();
+The class provides getters and setters for each of the supra parameters,
+according to the following pattern :
+_ getXXX() and setXXX() where XXX is the name of the paramater.
 
 ================================================================================
 
 III : METHODS
 _____________
 
-The class provides various methods as below :
+The class provides the following methods :
 
-int roll(int $n)
+void activates(bool $b)
 ---------------------
-_ rolls n dice of the preset value and returns the sum of them.
+_ activates the ship before he can be used by the player
+
+bool moves($direction, $board)
+---------------------
+_ supplied with a $direction and the $board instance, the moves function sets a
+new position for the current ship, checking for collision with the environment
+or other ships.
+
+void upgrade($data)
+------------------
+_ accepts an array as $data["what" => $what, "how" => $how, "which" => $which]
+
+$what can be either speed, shield or weapon.
+$how is either the number of dices or the bonus wished.
+$which is an optional parameter targetting the current weapon.
+
+void fire(to_do)
+----------------
+_to do
 
 ================================================================================
 
 IV : VERBOSE MODE
 _________________
 
-Verbose mode can be enabled using the Dice verbose static attribute as below :
-_ Dice::verbose = true
+Verbose mode can be enabled using the Ship verbose static attribute as below :
+_ Ship::verbose = true
 
----------------------------------------------------------------------- Dice --->
+---------------------------------------------------------------------- Ship --->

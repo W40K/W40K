@@ -1,0 +1,39 @@
+<- Block ------------------------------------------------------------------------
+
+I : DEFINITION
+______________
+
+The Block class accepts paramaters such as below :
+
+new Block(["sprite" => $sprite, "object" => $object])
+
+Where :
+_ $sprite is a single sprite file (might be an array in the near future)
+_ $object is an object instance of your choice, supposed to be present on the 
+block. Typically a Ship extending instance or an Obstacle instance.
+================================================================================
+
+II : GETTERS AND SETTERS
+________________________
+
+The class provides only getters and setters such as below :
+
+_ getSprite() and setSprite()
+_ getObject() and setObject()
+
+================================================================================
+
+III : METHODS
+_____________
+
+The class provides no methods.
+
+================================================================================
+
+IV : VERBOSE MODE
+_________________
+
+Verbose mode can be enabled using the Block verbose static attribute as below :
+_ Block::verbose = true
+
+---------------------------------------------------------------------- Block --->

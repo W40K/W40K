@@ -1,0 +1,51 @@
+<- Weapon ----------------------------------------------------------------------
+
+I : DEFINITION
+______________
+
+The Weapon class accepts paramaters such as below :
+
+new Weapon(["name" => $name, "sprite" => $sprite, "shortRange" => $shortRange,
+			"mediumRange" => $mediumRange, "longRange" => $longRange, 
+			"effectZone" => $effectZone, "power" => $power,
+			"charges" => $charges])
+
+Where :
+_$name and $sprite are mandatory paramaters.
+_Other arguments, if not set, are defined by default accordingly :
+$shortRange = [1, 10];
+$mediumRange = [11, 21];
+$longRange = [21, 30];
+$effectZone = 10;
+$power = 1;
+$charges = 5;
+
+================================================================================
+
+II : GETTERS AND SETTERS
+________________________
+
+The class provides various getters and setters, following the pattern hereafter:
+
+_ getXXX() and setXXX() where x are the paramaters mentionned supra.
+
+================================================================================
+
+III : METHODS
+_____________
+
+The class provides one public method :
+
+void showRange()
+---------------------
+_ show the current range of the weapon (3 differents ranges at the same time)
+
+================================================================================
+
+IV : VERBOSE MODE
+_________________
+
+Verbose mode can be enabled using the Weapon verbose static attribute as below :
+_ Weapon::verbose = true
+
+-------------------------------------------------------------------- Weapon --->

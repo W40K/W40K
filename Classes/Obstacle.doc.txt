@@ -1,0 +1,42 @@
+<- Obstacle --------------------------------------------------------------------
+
+I : DEFINITION
+______________
+
+The Obstacle class accepts paramaters such as below :
+
+new Obstacle(["name" => $name, "size" => $size, "x" => $x, "y" => $y])
+
+Where :
+_$name is a mandatory paramater.
+_$size is an optional paramater, default value is 1.
+_$x and $y are obligatory parameters for x and y position in the board.
+================================================================================
+
+II : GETTERS AND SETTERS
+________________________
+
+The class provides a set of getters and setters as is :
+
+_getName() and setName();
+_getSize() and setSize();
+_getSprite() and setSprite();
+_getX() and setX();
+_getY() and setY();
+
+================================================================================
+
+III : METHODS
+_____________
+
+This class provides no methods.
+
+================================================================================
+
+IV : VERBOSE MODE
+_________________
+
+Verbose mode can be enabled using the Obstacle verbose static attribute as below :
+_ Obstacle::verbose = true
+
+------------------------------------------------------------------ Obstacle --->
