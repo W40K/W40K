@@ -11,7 +11,7 @@ abstract class Ship implements JsonSerializable {
 	public static $verbose = false;
 
 	private $_activated; // bool
-	private $_faction;
+	private $_faction; //fleet
 	private $_hp; // array (max, now)
 	private $_inerty;
 	private $_name;
@@ -21,9 +21,12 @@ abstract class Ship implements JsonSerializable {
 	private $_size;
 	private $_speed; // array (max, now);
 	private $_sprite;
+	private $_orientation;
 	private $_weapons; // array of objects
 	private $_x;
 	private $_y;
+	private $_oldX;
+	private $_oldY;
 
 	  /////////////////////////
 	 // getter and setters  //
@@ -45,6 +48,9 @@ abstract class Ship implements JsonSerializable {
 
 	public function getName() { return $this->_name; }
 	public function setName($name) { $this->_name = $name; }
+
+	public function getOrientation() { return $this->_orientation; }
+	public function setOrientation($orientation) { $this->_orientation = $orientation; }
 
 	public function getOwner() { return $this->_owner; }
 	public function setOwner ($owner) { $this->_owner = $owner; }
@@ -82,6 +88,12 @@ abstract class Ship implements JsonSerializable {
 
 	public function getY() { return $this->_y; }
 	public function setY($y) { $this->_y = $y; }
+
+	public function getOldX() { return $this->_oldX; }
+	public function setOldX($oldX) { $this->_oldX = $oldX; }
+
+	public function getOldY() { return $this->_oldY; }
+	public function setOldY($oldY) { $this->_oldY = $oldY; }
 
 	  ///////////////
 	 // builtins  //
@@ -215,34 +227,55 @@ abstract class Ship implements JsonSerializable {
 		{
 		case "up":
 			if ($this->getY() - 1 >= 0)
+			{
+				$this->setOldY($this->getY());
 				$this->setY($this->getY() - 1);
+			}
 			else
 				$this->isDestroyed();
 			break;
 		case "down":
 			if ($this->getY() + 1 < 100)
+			{
+				$this->setOldY($this->getY());
 				$this->setY($this->getY() + 1);
+			}
 			else
 				$this->isDestroyed();
 			break;
 		case "left":
 			if ($this->getX() - 1 >= 0)
+			{
+				$this->setOldX($this->getX());
 				$this->setX($this->getX() - 1);
+			}
 			else
 				$this->isDestroyed();
 			break;
 		case "right":
 			if ($this->getX() + 1 < 150)
+			{
+				$this->setOldX($this->getX());
 				$this->setX($this->getX() + 1);
+			}
 			else
 				$this->isDestroyed();
 			break;
 		}
+		$this->setOrientation($direction);
 		$this->setSpeed(["now" => $speed["now"] - 1]);
 		if ($this->_checkCollision($board))
 			echo "COLLISION<br />";
 		else
-			return (true);
+		{
+			$oldX = intVal($this->getOldX());
+			$oldY = intVal($this->getOldY());
+			echo "this => $oldX et $oldY";
+			$board->updateBoard([
+				["object" => null, "x" => $oldX, "y" => $oldY],
+				["object" => $this, "x" => $this->getX(), "y" => $this->getY()]
+			]);
+		}
 	}
 
 	// Collision ?
@@ -270,24 +303,164 @@ abstract class Ship implements JsonSerializable {
 			else
 				return "dead";
 		}
-		
-		echo $str;
-		echo "<br /><br />";
 		return (false);
 	}
 
 	// is_destroyed
 	public function isDestroyed()
 	{
-		// destroy ship in flotte;
-		// parent::destroyShip ?
-		echo "DESTRUCTION <br />";
+		$fleet = $this->getFaction();
+		$name = $this->getName();
+		$fleet->removeShip($name);
+		echo "$name no more exists in its fleet<br />";
 	}
 	
 	// fire
-	public function fire(Weapon $weapon)
+	public function fire($which, $board)
 	{
-		// to do !
+		$direction = $this->getOrientation();
+		$weapons = $this->getWeapons();
+		$weapon = $weapons[$which];
+		$shortRange = $weapon->getShortRange();
+		$mediumRange = $weapon->getMediumRange();
+		$longRange = $weapon->getLongRange();
+
+		$x = $this->getX();
+		$y = $this->getY();
+		$start = $shortRange[0];
+		$end = $longRange[1];
+
+		echo "$x, $y, $start, $end";
+	
+		// straight fire
+		switch ($direction)
+		{
+		case "up":
+			for ($i = $start; $i < $end; $i++)
+			{
+				$block = $board->getBoard()[$y - $i][$x];
+				$object = $block->getObject();
+				$parent = get_parent_class($object);
+				$class = get_class($object);
+				if ($parent == "Ship")
+				{
+					echo "SHIP IS DAMAGED ===>";
+					$this->_computeHit($object, $weapon, $i);
+					break ;
+				}
+				else if ($class == "Obstacle")
+				{
+					echo "YOU HAVE HIT AN OBSTACLE  ===>";
+					print_r($object);
+					break ;
+				}
+			}
+			break;
+		case "down":
+			for ($i = $start; $i < $end; $i++)
+			{
+				$block = $board->getBoard()[$y + $i][$x];
+				$object = $block->getObject();
+				$parent = get_parent_class($object);
+				$class = get_class($object);
+				if ($parent == "Ship")
+				{
+					echo "YOU HAVE HIT A SHIP ! ////";
+					$this->_computeHit($object, $weapon, $i);
+					break ;
+				}
+				else if ($class == "Obstacle")
+				{
+					echo "YOU HAVE HIT AN OBSTACLE  ===>";
+					print_r($object);
+					break ;
+				}
+			}
+			break;
+		case "left":
+			for ($i = $start; $i < $end; $i++)
+			{
+				$block = $board->getBoard()[$y][$x - $i];
+				$object = $block->getObject();
+				$parent = get_parent_class($object);
+				$class = get_class($object);
+				if ($parent == "Ship")
+				{
+					echo "SHIP IS DAMAGED ===>";
+					$this->_computeHit($object, $weapon, $i);
+					break ;
+				}
+				else if ($class == "Obstacle")
+				{
+					echo "YOU HAVE HIT AN OBSTACLE  ===>";
+					print_r($object);
+					break ;
+				}
+			}
+			break;
+		case "right":
+			for ($i = $start; $i < $end; $i++)
+			{
+				$block = $board->getBoard()[$y][$x + $i];
+				$object = $block->getObject();
+				$parent = get_parent_class($object);
+				$class = get_class($object);
+				if ($parent == "Ship")
+				{
+					echo "SHIP IS DAMAGED ===>";
+					$this->_computeHit($object, $weapon, $i);
+					break ;
+				}
+				else if ($class == "Obstacle")
+				{
+					echo "YOU HAVE HIT AN OBSTACLE  ===>";
+					print_r($object);
+					break ;
+				}
+			}
+			break;
+		}
+	}
+
+	private function _computeHit($object, $weapon, $i)
+	{
+		$shortRange = $weapon->getShortRange();
+		$mediumRange = $weapon->getMediumRange();
+		$longRange = $weapon->getLongRange();
+
+$fleet = new Fleet(["name" => "Ma super flotte", "owner" => "me"]);
+		if ($i <= $shortRange[1])
+			$minDice = 4;
+		else if ($i <= $mediumRange[1])
+			$minDice = 5;
+		else if ($i <= $longRange[1])
+			$minDice = 6;
+		else
+			return (false);
+
+		$damages = 0;
+		$charges = $weapon->getCharges();
+		$dice = new Dice([]);
+		for ($j = 0; $j < $charges; $j++)
+		{
+			$result = $dice->roll(1);
+			if ($result >= $minDice)
+				$damages += $result;
+		}
+		$name = $object->getName();
+		echo "$name has been hit for $damages total damages <br />";
+		$hp = $object->getHp();
+		$hp["now"] = $hp["now"] - $damages;
+		if ($hp["now"] > 0)
+		{
+			echo "$name has now ". $hp['now'] ."HP";
+			$object->setHp($hp);
+		}
+		else
+		{
+			echo "$name has been destroyed !";
+			$object->isDestroyed();
+		}
 	}
 }	//! end of Ship.class.php //
 ?>

@@ -5,24 +5,23 @@ require_once("Obstacle.class.php");
 require_once("Fleet.class.php");
 require_once("Board.class.php");
 
-Board::$verbose = true;
+//Board::$verbose = true;
 $board = new Board(["width" => 150, "height" => 100]);
 $board->initBoard();
 
 //Fleet::$verbose = true;
-$fleet = new Fleet(["name" => "Ma super flotte", "owner" => "me"]);
+$myFleet = new Fleet(["name" => "Ma super flotte", "owner" => "me"]);
+$ennemyFleet = new Fleet(["name" => "Les méchants", "owner" => "me"]);
 //Fighter::$verbose = true;
-$ship = new Fighter(["name" => "Foo Fighter", "faction" => "zikos",
-	"x" => 1, "y" => 0, "owner" => "me", "sprite" => "fighter.png"]);
-$ship2 = new Fighter(["name" => "Foo Fighter2", "faction" => "zikos",
-	"x" => 2, "y" => 0, "owner" => "me", "sprite" => "fighter.png"]);
-$planet = new Obstacle(["name" => "Planet X", "x" => 1, "y" => 1, "sprite" => "planet.jpg"]);
+$ship = new Fighter(["name" => "Foo Fighter", "faction" => $myFleet,
+	"x" => 0, "y" => 0, "owner" => "me", "sprite" => "fighter.png"]);
+$ennemy = new Fighter(["name" => "Tiger Fighter", "faction" => $ennemyFleet,
+	"x" => 10, "y" => 0, "owner" => "not me", "sprite" => "fighter.png"]);
 $board->updateBoard([
-		["object" => $ship, "x" => 1, "y" => 0],
-		["object" => $ship2, "x" => 2, "y" => 0],
-		["object" => $planet, "x" => 1, "y" => 1]
+		["object" => $ennemy, "x" => $ennemy->getX(), "y" => $ennemy->getY()],
+		["object" => $ship, "x" => $ship->getX(), "y" => $ship->getY()]
 	]);
-
-$ship->moves("down", $board);
+$ship->moves("up", $board);
+//$ship->fire("Mini-lasers", $board);
 echo $board->toJson();
 ?>
