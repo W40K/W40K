@@ -78,10 +78,12 @@ class Obstacle implements JsonSerializable {
 
 	// which data should be serialized !
 	public function jsonSerialize() {
-		$array = ["name" => $this->getName(),
+		$array = ["type" => "obstacle",
+			"name" => $this->getName(),
 			"size" => $this->getSize(),
 			"x" => $this->getX(),
-			"y" => $this->getY()];
+			"y" => $this->getY(),
+			"sprite" => $this->getSprite()];
 		return ($array);
 	}
 

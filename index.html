@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title></title>
+	<link rel="stylesheet" href="resources/stylesheets/main.css" />
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="/resources/scripts/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+
+</head>
+<body>
+<div id = "main">
+<div id = "boardGame">
+<div id = "boardContainer">
+	<table id = "board">
+	</table>
+</div>
+</div>
+<nav>
+<button id="zoomIn">zoomIn</button>
+<button id="zoomOut">zoomOut</button>
+<button id="fitToScreen">fitToScreen</button>
+</nav>
+<aside>
+<div id = "shipBoard">
+<h3 id = "shipName"></h3>
+<h4 id = "faction"></h4>
+<img id = "shipImg" src="#" alt="#" />
+<label for="activated">activated</label><input type="checkbox" name="activated" id="activated" value="false" />
+<label for="hp">hp</label><input type="text" name="hp" id="hp" value="" /> (max : <span id = "hpMax"></span>)
+<label for="pp">pp</label><input type="text" name="pp" id="pp" value="" /> (max : <span id = "ppMax"></span>)
+<label for="shield">shield</label><input type="text" name="shield" id="shield" value="" />
+<label for="speed">speed</label><input type="text" name="speed" id="speed" value="" /> (max : <span id = "speedMax"></span>)
+<label for="weapons">weapons</label><input type="text" name="weapons" id="weapons" value="" />
+<hr />
+<input type="button" class = "direction" value="left" />
+<input type="button" class = "direction" value="up" />
+<input type="button" class = "direction" value="right" />
+<input type="button" class = "direction" value="down" />
+</div>
+<div id = "obstacleBoard">
+<h3 id = "obstacleName"></h3>
+<img id = "obstacleImg" src="#" alt="#" />
+<p id = "description"></p>
+</div>
+</aside>
+</div> <!-- #main -->
+
+<!-- TIME FOR SCRIIIIIIIIIIPT -->
+	<script type="text/javascript" charset="utf-8">
+
+(function() {
+
+	var data = {};
+	$.get("init.php?faction1=mine&faction2=his&player1=toto&player2=tata", function(data) {
+		data = $.parseJSON(data);
+		//temp board creation
+		for (var k=0; k < 100; k++) {
+			$("<tr>").attr("id", "tr" + k).appendTo($("#board"));
+			for (var i=0; i < 150; i++) {
+				if (data[k][i]["_object"] != null) {
+					var object = data[k][i]["_object"];
+					var sprite = object.sprite;
+					console.log(sprite);
+					if (sprite == "fighter1.png")
+						$("<td class = \"clickable\" data-x = '" + i + "' data-y = '" + k + "'>").css("background", "red").appendTo($("#tr" + k));
+					if (sprite == "fighter2.png")
+						$("<td class = \"clickable\" data-x = '" + i + "' data-y = '" + k + "'>").css("background", "blue").appendTo($("#tr" + k));
+					if (sprite == "planet1.png")
+						$("<td class = \"clickable\" data-x = '" + i + "' data-y = '" + k + "'>").css("background", "green").appendTo($("#tr" + k));
+					if (sprite == "planet2.png")
+						$("<td class = \"clickable\" data-x = '" + i + "' data-y = '" + k + "'>").css("background", "orange").appendTo($("#tr" + k));
+				}
+				else
+					$("<td>").appendTo($("#tr" + k));
+			}
+		}
+
+		$(document).on("click", ".clickable", function() {
+			x = $(this).attr("data-x");
+			y = $(this).attr("data-y");
+			object = data[y][x]._object;
+			if (object["type"] == "obstacle")
+			{
+				$("#shipBoard").css("display", "none");
+				$("#obstacleBoard").css("display", "block");
+				$("#obstacleName").text(object["name"]);
+				$("#description").text("ceci est un obstacle");
+				$("#obstacleImg").attr("src", "resources/images/" + object["sprite"]);
+			}
+			if (object["type"] == "ship")
+			{
+				$("#obstacleBoard").css("display", "none");
+				$("#shipBoard").css("display", "block");
+				$("#shipName").text(object["name"]);
+				$("#faction").text(object["faction"]["name"]);
+				$("#shipImg").attr("src", "resources/images/" + object["sprite"]);
+				$("#hp").val(object["hp"]["now"]);
+				$("#hpMax").text(object["hp"]["max"]);
+				$("#pp").val(object["pp"]["now"]);
+				$("#ppMax").text(object["pp"]["max"]);
+				$("#speed").val(object["speed"]["now"]);
+				$("#speedMax").text(object["speed"]["max"]);
+				$("#shield").val(object["shield"]);
+			}
+		});
+	});
+
+	$(".direction").click(function() {
+	var val = $(this).val();
+	var ship = "fighter1";
+	var href = "moves.php?direction=" + val + "&ship=" + ship;
+	$.get(href, function(data) {
+		data = $.parseJSON(data);
+		$("table").html("");
+		for (var k=0; k < 100; k++) {
+			$("<tr>").attr("id", "tr" + k).appendTo($("#board"));
+			for (var i=0; i < 150; i++) {
+				if (data[k][i]["_object"] != null) {
+					var object = data[k][i]["_object"];
+					var sprite = object.sprite;
+					console.log(sprite);
+					if (sprite == "fighter1.png")
+						$("<td class = \"clickable\" data-x = '" + i + "' data-y = '" + k + "'>").css("background", "red").appendTo($("#tr" + k));
+					if (sprite == "fighter2.png")
+						$("<td class = \"clickable\" data-x = '" + i + "' data-y = '" + k + "'>").css("background", "blue").appendTo($("#tr" + k));
+					if (sprite == "planet1.png")
+						$("<td class = \"clickable\" data-x = '" + i + "' data-y = '" + k + "'>").css("background", "green").appendTo($("#tr" + k));
+					if (sprite == "planet2.png")
+						$("<td class = \"clickable\" data-x = '" + i + "' data-y = '" + k + "'>").css("background", "orange").appendTo($("#tr" + k));
+				}
+				else
+					$("<td>").appendTo($("#tr" + k));
+			}
+		}
+
+		$(document).on("click", ".clickable", function() {
+			x = $(this).attr("data-x");
+			y = $(this).attr("data-y");
+			object = data[y][x]._object;
+			if (object["type"] == "obstacle")
+			{
+				$("#shipBoard").css("display", "none");
+				$("#obstacleBoard").css("display", "block");
+				$("#obstacleName").text(object["name"]);
+				$("#description").text("ceci est un obstacle");
+				$("#obstacleImg").attr("src", "resources/images/" + object["sprite"]);
+			}
+			if (object["type"] == "ship")
+			{
+				$("#obstacleBoard").css("display", "none");
+				$("#shipBoard").css("display", "block");
+				$("#shipName").text(object["name"]);
+				$("#faction").text(object["faction"]["name"]);
+				$("#shipImg").attr("src", "resources/images/" + object["sprite"]);
+				$("#hp").val(object["hp"]["now"]);
+				$("#hpMax").text(object["hp"]["max"]);
+				$("#pp").val(object["pp"]["now"]);
+				$("#ppMax").text(object["pp"]["max"]);
+				$("#speed").val(object["speed"]["now"]);
+				$("#speedMax").text(object["speed"]["max"]);
+				$("#shield").val(object["shield"]);
+			}
+		});
+	});
+	}); // end of .direction
+
+	// board resizing
+	DEFAULT_W = $("table").css("width");
+	DEFAULT_Y = $("table").css("height");
+	STEP = 300;
+
+	var i = 0;
+
+	$("#zoomIn").click(function() {
+		i++;
+		$("table").draggable({containment: [-STEP * i / 2 - 5 * i, -STEP * i / 2 - 5 * i, STEP * i / 2 + 10 * i, STEP * i/ 2 + 10 * i]});
+		$("table").css({ width: "+="+STEP, height: "+="+STEP, marginTop: "-="+STEP/2, marginLeft: "-="+STEP/2});
+	});
+
+	$("#zoomOut").click(function() {
+		if (i != 0)
+		{
+			i--;
+			$("table").css({ width: "-="+STEP, height: "-="+STEP, marginTop: "+="+STEP/2, marginLeft: "+="+STEP/2});
+			$("table").draggable({containment: [-STEP * i / 2 - 5 * i, -STEP * i / 2 - 5 * i, STEP * i / 2 + 10 * i, STEP * i/ 2 + 10 * i]});
+		}
+	});
+
+	$("#fitToScreen").click(function() {
+		i = 0;
+		$("table").css({ width: DEFAULT_W, height: DEFAULT_Y, top:0, left:0, marginTop:0, marginLeft:0});
+		$("table").draggable("destroy");
+	});
+
+})();
+	</script>
+</body>
+</html>

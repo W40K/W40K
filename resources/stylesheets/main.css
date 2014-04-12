@@ -1,10 +1,13 @@
 body {
 	background: rgb(10,10,20);
+	color:white;
 }
 
 #boardGame {
 	position:relative;
 	background:url("/resources/images/space.jpg");
+	top:0px;
+	left:0px;
 	width: 1450px;
 	height: 1200px;
 	overflow: hidden;
@@ -27,4 +30,18 @@ td {
 	width:100px;
 	height:100px;
 	background: red;
+}
+
+aside {
+	position:absolute;
+	top:0px;
+	right:0px;
+}
+
+#shipBoard, #obstacleBoard {
+	display: none;
+}
+
+#shipBoard input, #shipBoard img {
+	display: block;
 }

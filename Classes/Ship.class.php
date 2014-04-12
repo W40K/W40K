@@ -163,7 +163,8 @@ abstract class Ship implements JsonSerializable {
 
 	// which data should be serialized !
 	public function jsonSerialize() {
-		$array = ["faction" => $this->getFaction(),
+		$array = ["type" => "ship",
+			"faction" => $this->getFaction(),
 			"inerty" => $this->getInerty(),
 			"name" => $this->getName(),
 			"owner" => $this->getOwner(),
@@ -228,8 +229,9 @@ abstract class Ship implements JsonSerializable {
 		case "up":
 			if ($this->getY() - 1 >= 0)
 			{
-				$this->setOldY($this->getY());
-				$this->setY($this->getY() - 1);
+				$y = $this->getY();
+				$this->setOldY($y);
+				$this->setY($y - 1);
 			}
 			else
 				$this->isDestroyed();
@@ -237,8 +239,9 @@ abstract class Ship implements JsonSerializable {
 		case "down":
 			if ($this->getY() + 1 < 100)
 			{
-				$this->setOldY($this->getY());
-				$this->setY($this->getY() + 1);
+				$y = $this->getY();
+				$this->setOldY($y);
+				$this->setY($y + 1);
 			}
 			else
 				$this->isDestroyed();
@@ -265,12 +268,11 @@ abstract class Ship implements JsonSerializable {
 		$this->setOrientation($direction);
 		$this->setSpeed(["now" => $speed["now"] - 1]);
 		if ($this->_checkCollision($board))
-			echo "COLLISION<br />";
+			return false ; //Collision
 		else
 		{
 			$oldX = intVal($this->getOldX());
 			$oldY = intVal($this->getOldY());
-			echo "this => $oldX et $oldY";
 			$board->updateBoard([
 				["object" => null, "x" => $oldX, "y" => $oldY],
 				["object" => $this, "x" => $this->getX(), "y" => $this->getY()]
@@ -285,7 +287,7 @@ abstract class Ship implements JsonSerializable {
 		if ($boum == "dead")
 			$this->isDestroyed();
 		else if ($boum == "damages")
-			echo "DAMAGES<br />";
+			return (false); //echo "DAMAGES<br />";
 		else
 			return (false);
 	}
@@ -312,7 +314,6 @@ abstract class Ship implements JsonSerializable {
 		$fleet = $this->getFaction();
 		$name = $this->getName();
 		$fleet->removeShip($name);
-		echo "$name no more exists in its fleet<br />";
 	}
 	
 	// fire
@@ -330,8 +331,6 @@ abstract class Ship implements JsonSerializable {
 		$start = $shortRange[0];
 		$end = $longRange[1];
 
-		echo "$x, $y, $start, $end";
-	
 		// straight fire
 		switch ($direction)
 		{
@@ -344,14 +343,11 @@ abstract class Ship implements JsonSerializable {
 				$class = get_class($object);
 				if ($parent == "Ship")
 				{
-					echo "SHIP IS DAMAGED ===>";
 					$this->_computeHit($object, $weapon, $i);
 					break ;
 				}
 				else if ($class == "Obstacle")
 				{
-					echo "YOU HAVE HIT AN OBSTACLE  ===>";
-					print_r($object);
 					break ;
 				}
 			}
@@ -365,16 +361,11 @@ abstract class Ship implements JsonSerializable {
 				$class = get_class($object);
 				if ($parent == "Ship")
 				{
-					echo "YOU HAVE HIT A SHIP ! ////";
 					$this->_computeHit($object, $weapon, $i);
 					break ;
 				}
 				else if ($class == "Obstacle")
-				{
-					echo "YOU HAVE HIT AN OBSTACLE  ===>";
-					print_r($object);
 					break ;
-				}
 			}
 			break;
 		case "left":
@@ -386,16 +377,11 @@ abstract class Ship implements JsonSerializable {
 				$class = get_class($object);
 				if ($parent == "Ship")
 				{
-					echo "SHIP IS DAMAGED ===>";
 					$this->_computeHit($object, $weapon, $i);
 					break ;
 				}
 				else if ($class == "Obstacle")
-				{
-					echo "YOU HAVE HIT AN OBSTACLE  ===>";
-					print_r($object);
 					break ;
-				}
 			}
 			break;
 		case "right":
@@ -407,16 +393,10 @@ abstract class Ship implements JsonSerializable {
 				$class = get_class($object);
 				if ($parent == "Ship")
 				{
-					echo "SHIP IS DAMAGED ===>";
 					$this->_computeHit($object, $weapon, $i);
-					break ;
 				}
 				else if ($class == "Obstacle")
-				{
-					echo "YOU HAVE HIT AN OBSTACLE  ===>";
-					print_r($object);
 					break ;
-				}
 			}
 			break;
 		}

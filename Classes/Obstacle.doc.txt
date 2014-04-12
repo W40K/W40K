@@ -5,7 +5,8 @@ ______________
 
 The Obstacle class accepts paramaters such as below :
 
-new Obstacle(["name" => $name, "size" => $size, "x" => $x, "y" => $y])
+new Obstacle(["name" => $name, "size" => $size, "x" => $x, "y" => $y,
+"sprite" => $sprite])
 
 Where :
 _$name is a mandatory paramater.
@@ -39,4 +40,4 @@ _________________
 Verbose mode can be enabled using the Obstacle verbose static attribute as below :
 _ Obstacle::verbose = true
 
------------------------------------------------------------------- Obstacle --->
+----------------------------------------------------------------- Obstacle --->

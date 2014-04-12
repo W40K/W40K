@@ -1,6 +1,6 @@
 <?php
 
-class Fleet {
+class Fleet implements JsonSerializable {
 
 	  /////////////////
 	 // attributes  //
@@ -58,6 +58,12 @@ class Fleet {
 
 	public function doc() {
 		echo file_get_contents("Dice.doc.txt");
+	}
+
+	// which data should be serialized !
+	public function jsonSerialize() {
+		$array = ["name" => $this->getName()];
+		return ($array);
 	}
 
 	  //////////////
